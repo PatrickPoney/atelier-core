@@ -71,6 +71,8 @@ const login = async (context, next) => {
 
     const expiresInMinutes = config.get("auth.sessionDuration");
 
+    const expiresDateTime = DateTime.local().plus({minutes: expiresInMinutes});
+
     const token = context.state.jwt = await jwt.issue({userId: document._id, sessionId: result.insertedId}, {expiresIn: `${expiresInMinutes} minutes`}, config.get("jwt.secret"));
 
     // Store token in session
@@ -83,7 +85,7 @@ const login = async (context, next) => {
     context.status = 200;
     context.body = {
         jwt: token,
-        jwtExpiresAt: DateTime.local().plus({minutes: expiresInMinutes}).toJSDate(),
+        jwtExpiresAt: expiresDateTime.toJSDate(),
         user: loPick(document, ["_id", "identifier"])
     };
 
