@@ -1,7 +1,7 @@
 "use strict";
 
 const yup = require("yup");
-const sortable = ["_id", "name", "description", "createdBy", "createdAt", "updatedAt", "updatedBy"];
+const sortable = ["_id", "name", "description", "readOnly", "createdBy", "createdAt", "updatedAt", "updatedBy"];
 
 const index = yup.object({
 
@@ -15,14 +15,16 @@ const index = yup.object({
 const post = yup.object({
 
     name: yup.string().required().min(1).max(255),
-    description: yup.string().nullable().max(1024)
+    description: yup.string().nullable().max(1024),
+    readOnly: yup.boolean().required()
 
 });
 
 const put = yup.object({
 
     name: yup.string().min(1).max(255),
-    description: yup.string().nullable().max(1024)
+    description: yup.string().nullable().max(1024),
+    readOnly: yup.boolean().required()
 
 });
 
