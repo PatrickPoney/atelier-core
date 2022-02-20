@@ -3,6 +3,7 @@
 const settings = require("./api/settings");
 const roles = require("./api/roles");
 const users = require("./api/users");
+const sessions = require("./api/sessions");
 
 module.exports = async app => {
 
@@ -26,6 +27,10 @@ module.exports = async app => {
         context.events.on("guard:action [api:users get]", users.get);
         context.events.on("guard:action [api:users put]", users.put);
         context.events.on("guard:action [api:users delete]", users.delete);
+
+        context.events.on("guard:action [api:sessions index]", sessions.index);
+        context.events.on("guard:action [api:sessions get]", sessions.get);
+        context.events.on("guard:action [api:sessions close]", sessions.close);
 
         await next();
 

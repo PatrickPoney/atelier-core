@@ -23,7 +23,7 @@ module.exports = async (context, next) => {
 
     await guard("admin:sessions close", context);
 
-    await context.events.emit("admin:sessions updating", context);
+    await context.events.emit("admin:sessions closing", context);
 
     const values = {
         closed: true,
@@ -35,7 +35,7 @@ module.exports = async (context, next) => {
 
     context.state.document = await mongodb.collection("sessions").findOne({_id}, {token: 0});
 
-    await context.events.emit("admin:sessions updated", context);
+    await context.events.emit("admin:sessions closed", context);
 
     context.status = 204;
     context.body = "";
