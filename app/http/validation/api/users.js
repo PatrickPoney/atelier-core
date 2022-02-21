@@ -14,7 +14,7 @@ const index = yup.object({
 
 const post = yup.object({
 
-    roleIds: yup.string().required().min(1).max(255),
+    roleIds: yup.array().of(yup.string().min(1).max(50)),
     email: yup.string().required().max(320).email(),
     identifier: yup.string().required().min(1).max(255),
     password: yup.string().required().min(8).max(255),
@@ -28,7 +28,7 @@ const post = yup.object({
 
 const put = yup.object({
 
-    roleIds: yup.string().min(1).max(255),
+    roleIds: yup.array().of(yup.string().min(1).max(50)),
     email: yup.string().max(320).email(),
     identifier: yup.string().min(1).max(255),
     password: yup.string().min(8).max(255),
