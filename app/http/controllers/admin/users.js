@@ -43,7 +43,7 @@ const post = async (context, next) => {
     await context.events.emit("admin:users creating", context);
 
     const values = loAssign(loCloneDeep(input), {
-        roleId: ObjectId(input.roleId),
+        roleIds: input.roleIds.length > 0 ? input.roleIds.map(value => ObjectId(value)) : null,
         createdAt: new Date(),
         createdBy: context.state.user._id,
         password: await bcrypt.hash(input.password, await bcrypt.genSalt())
@@ -108,8 +108,8 @@ const put = async (context, next) => {
         values.password = await bcrypt.hash(values.password, await bcrypt.genSalt());
     }
 
-    if (values.roleId) {
-        values.roleId = ObjectId(values.roleId);
+    if (values.hasOwnProperty("roleIds")) {
+        values.roleIds = values.roleIds.length > 0 ? values.roleIds.map(value => ObjectId(value)) : null;
     }
 
     await mongodb.collection("users").updateOne({_id}, {$set: loOmit(values, ["passwordConfirm"])});

@@ -24,7 +24,7 @@ module.exports = async (context, next) => {
 
     context.state.document = document;
 
-    await guard("api:sessions close", context);
+    await guard("api:sessions close", context, false);
 
     await context.events.emit("api:sessions closing", context);
 

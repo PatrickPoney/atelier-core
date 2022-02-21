@@ -20,24 +20,10 @@ module.exports = compose([session, async (context, next) => {
 
     await context.events.emit("user:check succeed", context);
 
-    const role = context.state.role = await mongodb.collection("roles").findOne({_id: context.state.user.roleId, deletedAt: {$eq: null}});
+    const roleIds = context.state.user.roleIds || [];
 
-    // If role missing or deleted
-    if (!role) {
-        const session = context.state.session;
-
-        // Role is missing/deleted so we are closing session
-        if (session) {
-            const values = {
-                closed: true,
-                closedBy: context.state.user._id,
-                closedAt: new Date()
-            };
-
-            await mongodb.collection("sessions").updateOne({_id: session._id}, {$set: values});
-        }
-
-        context.throw(401);
+    if (roleIds.length > 0) {
+        context.state.roles = await mongodb.collection("roles").find({_id: {$in: roleIds}, deletedAt: {$eq: null}});
     }
 
     await next();

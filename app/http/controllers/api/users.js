@@ -17,7 +17,7 @@ const index = async (context, next) => {
 
     context.state.input = input;
 
-    await guard("api:users index", context);
+    await guard("api:users index", context, false);
 
     const {filter, projection, limit, skip, sort} = query(input, 10, "createdAt");
 
@@ -38,11 +38,12 @@ const post = async (context, next) => {
 
     context.state.input = input;
 
-    await guard("api:users post", context);
+    await guard("api:users post", context, false);
 
     await context.events.emit("api:users creating", context);
 
     const values = loAssign(loCloneDeep(input), {
+        roleIds: input.roleIds.length > 0 ? input.roleIds.map(value => ObjectId(value)) : null,
         createdAt: input.createdAt || new Date(),
         createdBy: input.createdBy ? ObjectId(input.createdBy) : (context.state.user ? context.state.user._id : null),
         password: await bcrypt.hash(input.password, await bcrypt.genSalt())
@@ -71,7 +72,7 @@ const get = async (context, next) => {
         context.throw(404);
     }
 
-    await guard("api:users get", context);
+    await guard("api:users get", context, false);
 
     context.status = 200;
     context.body = {data: document};
@@ -94,7 +95,7 @@ const put = async (context, next) => {
 
     context.state.document = document;
 
-    await guard("api:users put", context);
+    await guard("api:users put", context, false);
 
     await context.events.emit("api:users updating", context);
 
@@ -103,8 +104,12 @@ const put = async (context, next) => {
         updatedBy: input.updatedBy ? ObjectId(input.updatedBy) : (context.state.user ? context.state.user._id : null)
     });
 
-    if (input.password) {
-        values.password = await bcrypt.hash(input.password, await bcrypt.genSalt());
+    if (values.password) {
+        values.password = await bcrypt.hash(values.password, await bcrypt.genSalt());
+    }
+
+    if (values.hasOwnProperty("roleIds")) {
+        values.roleIds = values.roleIds.length > 0 ? values.roleIds.map(value => ObjectId(value)) : null;
     }
 
     await mongodb.collection("users").updateOne({_id}, {$set: loOmit(values, ["passwordConfirm"])});
@@ -134,7 +139,7 @@ const destroy = async (context, next) => {
 
     context.state.document = document;
 
-    await guard("api:users delete", context);
+    await guard("api:users delete", context, false);
 
     await context.events.emit("api:users deleting", context);
 

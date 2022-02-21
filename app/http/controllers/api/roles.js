@@ -15,7 +15,7 @@ const index = async (context, next) => {
 
     context.state.input = input;
 
-    await guard("api:roles index", context);
+    await guard("api:roles index", context, false);
 
     const {filter, projection, limit, skip, sort} = query(input, 10, "createdAt");
 
@@ -34,7 +34,7 @@ const post = async (context, next) => {
 
     context.state.input = input;
 
-    await guard("api:roles post", context);
+    await guard("api:roles post", context, false);
 
     await context.events.emit("api:roles creating", context);
 
@@ -68,7 +68,7 @@ const get = async (context, next) => {
 
     context.state.document = document;
 
-    await guard("api:roles get", context);
+    await guard("api:roles get", context, false);
 
     context.status = 200;
     context.body = {data: document};
@@ -91,7 +91,7 @@ const put = async (context, next) => {
 
     context.state.document = document;
 
-    await guard("api:roles put", context);
+    await guard("api:roles put", context, false);
 
     await context.events.emit("api:roles updating", context);
 
@@ -127,7 +127,7 @@ const destroy = async (context, next) => {
 
     context.state.document = document;
 
-    await guard("api:roles delete", context);
+    await guard("api:roles delete", context, false);
 
     await context.events.emit("api:roles deleting", context);
 

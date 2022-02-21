@@ -13,7 +13,7 @@ const index = async (context, next) => {
 
     context.state.input = input;
 
-    await guard("api:sessions index", context);
+    await guard("api:sessions index", context, false);
 
     const {filter, projection, limit, skip, sort} = query(input, 10, "createdAt");
 
@@ -38,7 +38,7 @@ const get = async (context, next) => {
         context.throw(404);
     }
 
-    await guard("api:sessions get", context);
+    await guard("api:sessions get", context, false);
 
     context.status = 200;
     context.body = {data: document};

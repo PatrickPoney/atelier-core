@@ -57,7 +57,6 @@ const toEnv = require("../app/modules/helpers/toEnv");
         const result = await mongodb.collection("roles").insertOne({
             name: "admin",
             label: "Administrator",
-            super: true,
             createdAt: new Date()
         });
 
@@ -81,6 +80,7 @@ const toEnv = require("../app/modules/helpers/toEnv");
             identifier: "admin",
             password: await bcrypt.hash(password, await bcrypt.genSalt()),
             enabled: true,
+            super: true,
             createdAt: new Date()
         });
 
