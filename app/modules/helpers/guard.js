@@ -18,7 +18,7 @@ module.exports = async (action, context, requiresUserAuthentication = true) => {
         const permissions = roles.map(role => role.permissions || []).reduce((a, b) => a.concat(b), []);
 
         // Permission check for everyone but super users
-        passes = user ? (user.super ? true : permissions.indexOf(action) !== -1) : true;
+        passes = user.super ? true : permissions.indexOf(action) !== -1;
     } else {
         const apiToken = context.state.apiToken;
 
@@ -30,6 +30,7 @@ module.exports = async (action, context, requiresUserAuthentication = true) => {
         passes = true;
     }
 
+    // Last line of defense
     if (passes) {
         const result = await context.events.emit(`guard:action [${action}]`, context);
 

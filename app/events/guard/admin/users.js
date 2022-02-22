@@ -9,7 +9,7 @@ const post = async context => {
 
     // Only a super user can set another one
     if (!user.super && input.super === true) {
-        context.throw(403);
+        return false;
     }
 };
 
@@ -24,13 +24,13 @@ const put = async context => {
 
     // Can't disable self
     if (input.enabled === false && user._id.equals(targetUser._id)) {
-        context.throw(403);
+        return false;
     }
 
     // Only a super user can set/unset another one
     if (!user.super && typeof input.super === "boolean") {
         if ((!targetUser.super && input.super) || (targetUser.super && !input.super)) {
-            context.throw(403);
+            return false;
         }
     }
 };
@@ -41,12 +41,12 @@ const destroy = async context => {
 
     // Can't delete self :)
     if (user._id.equals(targetUser._id)) {
-        context.throw(403);
+        return false;
     }
 
     // Only a super user can delete another super user
     if (!user.super && targetUser.super) {
-        context.throw(403);
+        return false;
     }
 };
 
