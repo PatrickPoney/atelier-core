@@ -8,6 +8,7 @@ const listeners = [
     "../events/validation/api",
     "../events/http/admin",
     "../events/http/api",
+    "../events/mongodb",
 ];
 
 module.exports = async app => {

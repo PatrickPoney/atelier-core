@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node ./main.js",
     "setup": "node ./scripts/setup.js",
+    "api-token": "node ./scripts/api-token.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

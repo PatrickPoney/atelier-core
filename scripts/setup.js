@@ -11,7 +11,7 @@ const toEnv = require("../app/modules/helpers/toEnv");
 
 (async () => {
 
-    console.log("Setup initiated.");
+    console.log("Script initiated.");
 
     // -----------------------------------------------------------------------------------------------------------------
 
