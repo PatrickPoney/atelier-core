@@ -64,8 +64,7 @@ const {stdin, stdout} = require("process");
 
         await mongodb.collection("apiTokens").updateOne({_id: result.insertedId}, {$set: {token}});
 
-        console.log("API token created.");
-        console.log("With great power comes great responsibility...");
+        console.log("API token created. With great power comes great responsibility...");
         console.log("");
         console.log(token);
 
